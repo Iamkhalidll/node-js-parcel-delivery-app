@@ -47,6 +47,9 @@ router.put("/parcels/:id/presentLocation",requireAuth,async(req,res)=>{
           await parcel.save()
           res.status(200).send({msg:`parcel with id:${parcel._id} has been updated`})
         }
+        else{
+          res.status(400).send("Only the admin can access this route")
+        }
   }
   catch(err){
     //handling errors
@@ -71,7 +74,7 @@ router.put("/parcels/:id/cancel",requireAuth, async(req,res)=>{
         let deletedParcel = await Parcel.findByIdAndDelete({_id:req.params.id})
         res.status(200).send({msg:"Your order has been cancelled succesfully",id:deletedParcel.id},)
         }
-        else{return res.status(401).send("u are not authorized to change this parcel")}
+        else{return res.status(401).send("You are not authorized to change this parcel")}
   }
    catch(err){
     //handling errors
@@ -102,7 +105,7 @@ router.put("/parcels/:id/destination",requireAuth, async(req,res)=>{
        res.status(201).json({msg:"your destinations has been updated",id:parcel.id})
       }
        else{
-        res.status(401).send("U are not authorized to change destination of this parcel")
+        res.status(401).send("You are not authorized to change destination of this parcel")
        }
       
   }
@@ -159,7 +162,7 @@ router.put("/parcels/:id/status",requireAuth,async (req,res)=>{
           mailer(email,name,parcel.packageName)
         }
         else{
-           res.status(401).send("u are not authorized only an admin can access this route")
+           res.status(401).send("You are not authorized only an admin can access this route")
         }}
   catch(err){
     //error handling
