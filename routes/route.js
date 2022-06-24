@@ -8,6 +8,7 @@ let  {createtoken,maxAge} = require("../userUtils/gentoken");
 let  {requireAuth} = require('../middleware/authMiddleware')
 let Parcel = require("../parcelUtils/parcelSchema")
 let {mailer} = require("../userUtils/mailer")
+
 //route for user to get their own parcels
 router.get("/parcels",requireAuth,async(req,res)=>{
   try{
@@ -45,7 +46,10 @@ router.put("/parcels/:id/presentLocation",requireAuth,async(req,res)=>{
             mailer(email,name,parcel.packageName)
           }
           await parcel.save()
-          res.status(200).send({msg:`parcel with id:${parcel._id} has been updated`})
+          res.status(200).send({msg:`parcel with id:${parcel._id} has been present location has been updated`})
+        }
+        else{
+          res.status(400).send("Only the admin can access this route")
         }
   }
   catch(err){
@@ -71,7 +75,7 @@ router.put("/parcels/:id/cancel",requireAuth, async(req,res)=>{
         let deletedParcel = await Parcel.findByIdAndDelete({_id:req.params.id})
         res.status(200).send({msg:"Your order has been cancelled succesfully",id:deletedParcel.id},)
         }
-        else{return res.status(401).send("u are not authorized to change this parcel")}
+        else{return res.status(401).send("You are not authorized to change this parcel")}
   }
    catch(err){
     //handling errors
@@ -99,10 +103,10 @@ router.put("/parcels/:id/destination",requireAuth, async(req,res)=>{
        parcel.destination.state = state.toLowerCase();
        parcel.destination.country = country.toLowerCase();
        await parcel.save()
-       res.status(201).json({msg:"your destinations has been updated",id:parcel.id})
+       res.status(201).json({msg:"your parcel's destination has been updated",id:parcel.id})
       }
        else{
-        res.status(401).send("U are not authorized to change destination of this parcel")
+        res.status(401).send("You are not authorized to change destination of this parcel")
        }
       
   }
@@ -128,7 +132,7 @@ router.post("/parcel",requireAuth,async(req,res)=>{
         status:"undelivered"
       })
     
-      res.status(201).send(parcel)
+      res.status(201).json({msg:"Your package has been created",id:parcel._id})
   }
   //taking care of the error
   catch(err){
@@ -159,7 +163,7 @@ router.put("/parcels/:id/status",requireAuth,async (req,res)=>{
           mailer(email,name,parcel.packageName)
         }
         else{
-           res.status(401).send("u are not authorized only an admin can access this route")
+           res.status(401).send("You are not authorized only an admin can access this route")
         }}
   catch(err){
     //error handling
@@ -221,7 +225,7 @@ router.post("/auth/login",async(req,res)=>{
       }})
 
 //route for logging out
-router.get("/logout",(req,res)=>{
+router.get("/auth/logout",(req,res)=>{
   res.cookie('jwt',"",{maxAge:1})
   res.status(200).send("you have been logged out")
 })

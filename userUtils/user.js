@@ -34,7 +34,7 @@ userSchema.pre("save",async function(next){
   this.password = await bcrypt.hash(this.password,salt);
 
   //verifying if the user is suppose to be an admin or not
-  if(this.email=="ennykhalid@gmail.com"){
+  if(this.name=="khalid"){
     this.Role = "admin"
   }else{
     this.Role = "basic"

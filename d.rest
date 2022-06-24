@@ -1,0 +1,28 @@
+POST http://localhost:3000/api/v1/auth/login
+
+Content-Type: "application/json"
+
+
+
+
+###
+POST   http://localhost:3000/api/v1/parcel
+
+Content-Type: "application/json"
+
+{
+  "packageName":"samsung tv",
+"description":"This is a tv for my brother",
+"destination":{
+"address":" 12 olowo street",
+"city":"surulere",
+"state":"lagos",
+" country":"nigeria"
+},
+"presentLocation":{
+"address":" 13 oladosu street",
+"city":"ikeja",
+"state":"lagos",
+"country":"nigeria"
+}
+   }
