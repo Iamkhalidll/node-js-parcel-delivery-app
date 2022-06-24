@@ -51,6 +51,9 @@ router.put("/parcels/:id/presentLocation",requireAuth,async(req,res)=>{
         else{
           res.status(400).send("Only the admin can access this route")
         }
+        else{
+          res.status(400).send("Only the admin can access this route")
+        }
   }
   catch(err){
     //handling errors
